@@ -6,6 +6,7 @@
 
   <maintainer email="billyzheng.bz@gmail.com">Hongrui Zheng</maintainer>
   <maintainer email="jauckley@seas.upenn.edu">Joe Auckley</maintainer>
+  <!-- Thank you: https://github.com/mit-racecar/racecar_simulator -->
 
   <license>MIT</license>
   <buildtool_depend>catkin</buildtool_depend>
