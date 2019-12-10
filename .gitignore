@@ -1,0 +1,4 @@
+.DS_Store
+*.pyc
+__py_cache__
+f110_simulator/logs/collision_file.txt
