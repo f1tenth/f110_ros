@@ -2,7 +2,7 @@
 #include <vector>
 #include <cmath>
 
-#include "racecar_simulator/distance_transform.hpp"
+#include "f110_simulator/distance_transform.hpp"
 
 // Implementation based on the paper
 // Distance Transforms of Sampled Functions

@@ -8,7 +8,7 @@
 #include <sensor_msgs/Joy.h>
 #include <std_msgs/String.h>
 
-#include "racecar_simulator/channel.h"
+#include "f110_simulator/channel.h"
 
 class Mux {
 private:
