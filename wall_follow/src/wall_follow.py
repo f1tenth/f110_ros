@@ -31,7 +31,7 @@ class WallFollow:
     def __init__(self):
         #Topics & Subs, Pubs
         lidarscan_topic = '/scan'
-        drive_topic = '/drive'
+        drive_topic = '/nav'
 
         self.lidar_sub = #TODO: Subscribe to LIDAR
         self.drive_pub = #TODO: Publish to drive
