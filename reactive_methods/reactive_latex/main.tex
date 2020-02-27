@@ -1,0 +1,65 @@
+\documentclass[a4 paper]{article}
+% Set target color model to RGB
+\usepackage[inner=2.0cm,outer=2.0cm,top=2.5cm,bottom=2.5cm]{geometry}
+\usepackage{setspace}
+\usepackage[rgb]{xcolor}
+\usepackage{verbatim}
+\usepackage{subcaption}
+\usepackage{amsgen,amsmath,amstext,amsbsy,amsopn,tikz,amssymb,tkz-linknodes}
+\usepackage{fancyhdr}
+\usepackage[colorlinks=true, urlcolor=blue,  linkcolor=blue, citecolor=blue]{hyperref}
+\usepackage[colorinlistoftodos]{todonotes}
+\usepackage{rotating}
+%\usetikzlibrary{through,backgrounds}
+\hypersetup{%
+pdfauthor={Ashudeep Singh},%
+pdftitle={Homework},%
+pdfkeywords={Tikz,latex,bootstrap,uncertaintes},%
+pdfcreator={PDFLaTeX},%
+pdfproducer={PDFLaTeX},%
+}
+%\usetikzlibrary{shadows}
+% \usepackage[francais]{babel}
+\usepackage{booktabs}
+\input{macros.tex}
+
+
+\begin{document}
+\homework{Reactive Methods Lab}{Due: 28th September 2019}{Rahul Mangharam}{}{Student name(s)}{PennId(s)}
+\textbf{Course Policy}: Read all the instructions below carefully before you start working on the assignment, and before you make a submission.
+\begin{itemize}
+    \item All sources of material must be cited. The University Academic Code of Conduct
+will be strictly enforced.
+\end{itemize}
+\textbf{Goals and Learning Outcomes}: The following fundamentals should be understood by the students upon completion of this lab:
+\begin{itemize}
+    \item Reactive methods for obstacle avoidance
+\end{itemize}
+\section{Overview}
+In this lab, you will implement a reactive algorithm for obstacle avoidance. While the base starter code defines an implementation of the F1/10 Follow the Gap Algorithm, you are allowed to submit in C++, and encouraged to try different reactive algorithms or a combination of several. In total, the python code for the algorithm is only about 120 lines. 
+
+\section{Review of F1/10 Follow the Gap}
+The lecture slides on F1/10 Follow the gap is the best visual resource for understanding every step of the algorithm. However, the steps are outlined over here:
+\begin{enumerate}
+	\item Obtain laser scans and preprocess them 
+	\item Find the closest point in the LiDAR ranges array
+	\item Draw a safety bubble around this closest point and set all points inside this bubble to 0. All other non-zero points are now considered 'gaps' or 'free space'
+	\item Find the max length 'gap', in other words, the largest number of consecutive non-zero elements in your ranges array
+	\item Find the best goal point in this gap. Naively, this could be the furthest point away in your gap, but you can probably go faster if you follow the 'Better Idea' method as described in lecture. 
+	\item Actuate the car to move towards this goal point by publishing an AckermannDriveStamped to the '/nav' topic
+\end{enumerate}
+
+
+\section{Instructions}
+Implement a reactive algorithm to make the car drive autonomously around the Levine Hall map. You are free to implement any reactive algorithm  you want, but the skeleton code is for the F1/10 follow the gap algorithm in lecture. You can implement this node in either C++ or Python but the skeleton code is only in Python. You can download it from \href{https://github.com/f1tenth/f110_ros}{https://github.com/f1tenth/f110\_ros}. You will only have to edit reactive\_gap\_follow.py. There is also a test map (levine\_blocked.pgm) for you to evaluate on.
+
+\section{Deliverable}
+Submit the following on canvas by the due date:
+\begin{itemize}
+    \item Your package including the reactive\_gap\_follow.py node, names as \{student\_name\}\_reactive.zip (ensure compilation)
+    \item Make a youtube video of your reactive method around the Levine Loop in the simulator. You will also need to make a video of it making its way around the custom map we will provide to you. Add this link to this video(s) your zip file
+\end{itemize}
+
+\section{Extra Resources}
+UNC Follow the Gap Video: https://youtu.be/ctTJHueaTcY
+\end{document} 
