@@ -1,0 +1,68 @@
+\documentclass[letta4 paper]{article}
+% Set target color model to RGB
+\usepackage[inner=2.0cm,outer=2.0cm,top=2.5cm,bottom=2.5cm]{geometry}
+\usepackage{setspace}
+\usepackage[rgb]{xcolor}
+\usepackage{verbatim}
+\usepackage{subcaption}
+\usepackage{amsgen,amsmath,amstext,amsbsy,amsopn,tikz,amssymb,tkz-linknodes}
+\usepackage{fancyhdr}
+\usepackage[colorlinks=true, urlcolor=blue,  linkcolor=blue, citecolor=blue]{hyperref}
+\usepackage[colorinlistoftodos]{todonotes}
+\usepackage{rotating}
+\usepackage{listings}
+\usepackage[dvipsnames]{xcolor}
+%\usetikzlibrary{through,backgrounds}
+\hypersetup{%
+pdfauthor={Hongrui Zheng},%
+pdftitle={Homework},%
+pdfkeywords={Tikz,latex,bootstrap,uncertaintes},%
+pdfcreator={PDFLaTeX},%
+pdfproducer={PDFLaTeX},%
+}
+%\usetikzlibrary{shadows}
+% \usepackage[francais]{babel}
+\usepackage{booktabs}
+\input{macros.tex}
+
+
+\begin{document}
+\homework{Pure Pursuit Lab}{Due: 10/23/19}{Rahul Mangharam}{}{}
+
+\textbf{THIS IS A GROUP ASSIGNMENT}: submit one from each team (your new teams).\\
+
+\noindent \textbf{Goals and Learning outcomes}
+The objective of this lab is to give you working experience with a powerful SLAM package, Cartographer, and with a basic yet well-behaved trajectory planner: the Pure Pursuit algorithm.
+
+
+\section{Running Cartographer on the car}
+Follow the instructions from the lecture to run Cartographer on your car, then map Levine second floor donut and save it.
+
+
+\section{Localization with Particle Filter}
+Follow the instructions in Section `Localization with Particle Filter' of the Reference Manual and the instructions from the lecture to run particle filter on your car.
+
+
+\noindent You have been supplied with a $\textit{waypoint\_logger}$ node (pull the github repo), which logs information from the particle filter in Comma Separated Value (CSV) format (one column per piece of information, one row per estimate = one row per time step). You can modify the logger node so that it saves whatever you need. Drive the car manually and not terribly fast around Levine donut while running the particle filter and $\textit{waypoint\_logger}$. You will use the generated CSV file as the path to be tracked by pure pursuit.
+
+
+\section{Pure Pursuit Implementation}
+We have provided a skeleton for the pure pursuit node (pull the github repo). As per usual, test your algorithm first in the simulator before you test it on the car. As shown in the lecture, the curvature of the arc to track can be calculated as:
+\begin{equation}
+    \gamma = \frac{2|y|}{L^2}
+\end{equation}
+
+
+\section{Visualizing Waypoints}
+To visualize the list of waypoints you have, and to visualize the current waypoint you're picking, you'll need to use the \textit{visualization\_msgs} messages and RViz. You can find some information here: \href{http://wiki.ros.org/rviz/DisplayTypes/Marker}{http://wiki.ros.org/rviz/DisplayTypes/Marker}
+
+\section{Deliverable:}
+(as one zip file)
+\begin{enumerate}
+    \item A ROS Package by the name of : team\_name\_pure\_pursuit 
+    \item The map of Levine loop you made with Cartographer (.pgm and .yaml)
+    \item The recorded .csv file you've logged
+    \item You will be racing with your pure pursuit code on 10/23
+\end{enumerate}{}
+\end{document} 
+
