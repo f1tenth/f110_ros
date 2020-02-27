@@ -1,0 +1,17 @@
+\BOOKMARK [1][-]{section.1}{Overview}{}% 1
+\BOOKMARK [2][-]{subsection.1.1}{Goals and Learning outcomes}{section.1}% 2
+\BOOKMARK [1][-]{section.2}{Working with AprilTags}{}% 3
+\BOOKMARK [2][-]{subsection.2.1}{Download the required packages }{section.2}% 4
+\BOOKMARK [2][-]{subsection.2.2}{Obtain camera parameters}{section.2}% 5
+\BOOKMARK [2][-]{subsection.2.3}{Install apriltag\137ros}{section.2}% 6
+\BOOKMARK [2][-]{subsection.2.4}{Set up vehicle tracker and prediction repository}{section.2}% 7
+\BOOKMARK [2][-]{subsection.2.5}{Deliverables}{section.2}% 8
+\BOOKMARK [1][-]{section.3}{Convert Nodes to Nodelets}{}% 9
+\BOOKMARK [2][-]{subsection.3.1}{Deliverables}{section.3}% 10
+\BOOKMARK [1][-]{section.4}{Test Framework}{}% 11
+\BOOKMARK [2][-]{subsection.4.1}{Deliverables}{section.4}% 12
+\BOOKMARK [1][-]{section.5}{Extra Credit}{}% 13
+\BOOKMARK [2][-]{subsection.5.1}{Mechanical Design}{section.5}% 14
+\BOOKMARK [2][-]{subsection.5.2}{Improved Prediction}{section.5}% 15
+\BOOKMARK [2][-]{subsection.5.3}{Update the TX2 Kernel to support RealSense Camera}{section.5}% 16
+\BOOKMARK [2][-]{subsection.5.4}{YOLO pipeline}{section.5}% 17
