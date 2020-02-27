@@ -1,0 +1,151 @@
+\documentclass[letter]{article}
+% Set target color model to RGB
+\usepackage[inner=2.0cm,outer=2.0cm,top=2.5cm,bottom=2.5cm]{geometry}
+\usepackage{setspace}
+\usepackage[rgb]{xcolor}
+\usepackage{verbatim}
+\usepackage{subcaption}
+\usepackage{amsgen,amsmath,amstext,amsbsy,amsopn,tikz,amssymb,tkz-linknodes}
+\usepackage{fancyhdr}
+\usepackage[colorlinks=true, urlcolor=blue,  linkcolor=blue, citecolor=blue]{hyperref}
+\usepackage[colorinlistoftodos]{todonotes}
+\usepackage{rotating}
+\usepackage{listings}
+\usepackage{algorithm}
+\usepackage{algorithmic}
+%\usetikzlibrary{through,backgrounds}
+\hypersetup{%
+pdfauthor={Joe Auckley, Hongrui Zheng},%
+pdftitle={F1/10 Safety Lab},%
+pdfkeywords={Tikz,latex,bootstrap,uncertaintes},%
+pdfcreator={PDFLaTeX},%
+pdfproducer={PDFLaTeX},%
+}
+%\usetikzlibrary{shadows}
+% \usepackage[francais]{babel}
+\usepackage{booktabs}
+\input{macros.tex}
+\setlength\parindent{0pt}
+\lstset{basicstyle=\ttfamily,
+  showstringspaces=false,
+  commentstyle=\color{red},
+  keywordstyle=\color{blue}
+}
+
+\begin{document}
+
+\homework{Safety Node}{Due: 01/29/2020}{Rahul Mangharam}{}{Student name(s)}{PennID}
+\textbf{Course Policy}: Read all the instructions below carefully before you start working on the assignment, and before you make a submission.
+\begin{itemize}
+    \item All sources of material must be cited. The University Academic Code of Conduct
+will be strictly enforced.
+\end{itemize}
+\textbf{Goals and Learning outcomes}\\
+The following fundamentals should be understood by the students upon completion of this lab:
+\begin{itemize}
+    \item Using the LaserScan message in ROS
+    \item Time to Collision (TTC)
+    \item Safety critical systems
+\end{itemize}
+
+
+\section{Overview}
+The goal of this lab is to develop a safety node for the race cars that will stop the car from collision when travelling at higher velocities. We will implement Time to Collision using the \texttt{LaserScan} message in the simulator.%, and do some frame transformations using tools in ROS.
+\subsection{The LaserScan Message}
+Recall from the previous lab that each \texttt{LaserScan} message contains several fields that will be useful to us. You'll need to subscribe to the scan topic and calculate TTC with the \texttt{LaserScan} messages.
+
+\subsection{The Odometry Message}
+Both the simulator node and the car itself publish \texttt{Odometry} messages (ROS documentation linked here:\\
+\href{http://docs.ros.org/melodic/api/nav_msgs/html/msg/Odometry.html}{http://docs.ros.org/melodic/api/nav\_msgs/html/msg/Odometry.html}). Within its several fields, the message includes the car's position, orientation, and velocity. You'll need to explore this message type in this lab.
+
+\subsection{The AckermannDriveStamped Message}
+\texttt{AckermannDriveStamped} is the message type that we'll use throughout the course to send driving commands to the simulator and the car. ROS's documentation is linked here:\\
+\href{http://docs.ros.org/api/ackermann_msgs/html/msg/AckermannDriveStamped.html}{http://docs.ros.org/api/ackermann\_msgs/html/msg/AckermannDriveStamped.html}\\
+
+Note that we won't be sending driving commands to the car from this node, we're only sending the brake commands. By sending an \texttt{AckermannDriveStamped} message with the velocity set to 0.0, the simulator and the car will interpret this as a brake command and hit the brakes.
+
+\subsection{The TTC calculation}
+Time to Collision (TTC) is the time it would take for the car to collide with an obstacle if it maintained its current heading and velocity. Between the car and its obstacle, we can calculate it as: \\
+\begin{center}
+$TTC = \frac{r}{[-\dot{r}]_+}$ \\
+\end{center}
+where $r$ is the distance between the two objects and $\dot{r}$ is the time derivative of that distance. $\dot{r}$ is computed by projecting the relative velocity of the car onto the distance vector between the two objects. The operator $[]_+$ is defined as: $[x]_+ := $ max$(x, 0)$.\\
+You'll need to calculate the TTC for each beam in the laser scan. Projecting the velocity of the car onto each distance vector is very simple if you know the angle between the car's velocity vector and the distance vector (which can be determined easily from information in the \texttt{LaserScan} message).
+
+% \subsection{Frame transformations}
+% Recall from the lecture that the LaserScan messages you receive will be in the \texttt{laser} frame. We will transform the sensor reading to the front bumper frame of the car for a better estimate of TTC.
+
+% \newpage
+\section{Automatic Emergency Brake with TTC}
+For this lab, you will make a Safety Node that should halt the car before it collides with obstacles. To do this, you will make a ROS node that subscribes to the \texttt{LaserScan} and \texttt{Odometry} messages. It should analyze the \texttt{LaserScan} data and, if necessary, publish an \texttt{AckermannDriveStamped} with the velocity field set to 0.0 m/s, and a \texttt{Bool} message set to True (\href{http://docs.ros.org/melodic/api/std_msgs/html/msg/Bool.html}{http://docs.ros.org/melodic/api/std\_msgs/html/msg/Bool.html}). The \texttt{AckermannDriveStamped} message will be received by the Mux node and the \texttt{Bool} message will be received by the Behavior Controller, which will then tell the Mux node to select the appropriate Drive message.\\
+
+Note the following topic names for your publishers and subscribers (also detailed in the skeleton code): 
+\begin{itemize}
+    \item LaserScan: ``/scan"
+    \item Odometry: ``/odom"
+    \item Bool message: ``/brake\_bool"
+    \item Brake message: ``/brake"
+\end{itemize}
+
+You can implement this node in either C++ or Python, the skeleton code for both is found in the f1tenth/f110\_ros repository in the \textbf{safety} folder: \href{https://github.com/f1tenth/f110_ros}{https://github.com/f1tenth/f110\_ros}. \\
+
+\textbf{NOTE}: Make sure to press 'B' on your keyboard in the terminal window that launched the simulator. This will activate the AEB and allow the Behavior Controller to switch the Mux to Emergency Brake when the boolean is published as True. Pressing 'B' again will toggle the AEB off.
+
+\section{Deliverables and Submission}
+Submit the following as \{student\_name\}.zip on Canvas by 11:59 pm on Jan. 29th.
+\begin{itemize}
+    \item Your package including the safety node, named as \{student\_name\}\_safety (make sure it compiles before you submit after changing the package name)
+    \item Make a video of teleop (manual driving) around the Levine loop (with your safety node on) in the simulator without significant false positives.
+\end{itemize}
+
+\section {Grading}
+We will test your code by accelerating the car down a straight towards a wall in the Levine map, and your safety node should stop the car before collision. 
+
+\section{FAQ}
+\textbf{Q:} How should the TTC threshold be determined? \\
+\textbf{A:} We recommend trial and error on a variety of situations (e.g. driving down the hall vs straight at a wall) to minimize false positives while preventing crashes. You can get a good initial estimate using the car's deceleration (8.26 $\frac{m}{s^2}$) and it's velocity for keyboard driving (1.8 $\frac{m}{s}$). \\
+
+\textbf{Q:} Should ``false" be published on the \texttt{brake\_bool} topic when the AEB is not in effect? \\
+\textbf{A:} Yes. Publishing ``false" will make sure that no Drive messages on the \texttt{brake} topic are sent to the Simulator, and will allow other controllers (e.g. keyboard) to take back control. \\
+
+\textbf{Q:} If the AEB is not engaged, should a \texttt{AckermannDriveStamped} message be published on the \texttt{brake} topic? \\
+\textbf{A:} No, the \texttt{brake} topic is meant to only have messages that bring the car to a stop, so there is no need to send anything in this case. Moreover, if the AEB is not engaged, messages on the \texttt{brake} topic will not be sent to the Simulator. \\
+
+\textbf{Q:} Does the order of messages published matter? That is, is there a difference between:
+\begin{verbatim}
+brake_publisher.publish(brake_msg);
+brake_bool_publisher.publish(brake_bool_msg);
+\end{verbatim}
+and
+\begin{verbatim}
+brake_bool_publisher.publish(brake_bool_msg);
+brake_publisher.publish(brake_msg);
+\end{verbatim} 
+\textbf{A:} No. Due to latency between sending and receiving messages, this realistically won't matter. \\
+
+\textbf{Q:} How are the coordinate frames of the \texttt{LaserScan} and \texttt{Odometry} data oriented with respect to the car?\\
+\textbf{A:} The \texttt{Odometry} data is in the frame centered on the rear axle, seen below. The message gives the magnitude and sign of the car's 
+velocity. It is always directed in the \texttt{+x} direction (red axis). The \texttt{LaserScan} data is in the LiDar's frame, seen below towards the front of the car.\\
+\includegraphics[width = .5\textwidth]{car.png} \\
+
+\textbf{Q:} When testing driving forwards and in reverse, the car's distance from the wall after braking seems different between these two cases. Am I doing something wrong, or should I try and use different TTC thresholds? \\
+\textbf{A:} The ranges in the \texttt{LaserScan} message are from the LiDar's frame (seen above) which is not in the center of the car. An ideal AEB system would subtract the distance from the LiDar to the edge of the car for each beam, and use that distance in the TTC calculation. A two-threshold system could work too, but for this assignment, as long as it doesn't crash during keyboard teleop, a single threshold value is good enough. More sophisticated solutions are always welcome! \\
+
+\textbf{Q:} After the car is stopped by the AEB, if I drive the car towards the wall again, it will be stopped by the brake again. But if I repeat this, the car will move closer and closer to the wall until a collision occurs before the AEB can stop the car. Is this be acceptable or should the AEB prevent collisions in all circumstances? \\
+\textbf{A:} A collision in this unique situation is fine. When the car is extremely close to the wall and begins to move, it is impossible to stop it in time. \\
+
+% \section*{Part B: Pose transformations and using tf/tf2\_ros}
+% After you're done with Part A, you'll have a node that calculates TTC but in the \texttt{laser} frame. This gives us a good estimate but it will ignore the distance between the Lidar and the front bumper (the part that will actually hit the wall when the car comes into collision). We need to calculate TTC in the bumper frame for a better estimate.\\
+
+% Before you start, make sure you have went through the tf/tf2\_ros tutorials mentioned in the lecture. After you're done with the tutorials, follow the following steps:\\
+
+% \begin{itemize}
+%     \item Measured the distance from the Lidar to the front bumper (on the car). You can ignored the distance in \texttt{z} axis and assume the two frames are in the same \texttt{x-y} plane.
+%     \item Add a tf frame for the front bumper named \texttt{front\_bumper}, and set up a static transform between the \texttt{laser} frame and the \texttt{front\_bumper} frame called \texttt{front\_bumper\_to\_laser}. (There are multiple ways to achieve this.)
+%     \item Use the \texttt{tf/tf2\_ros} package to transform the Lidar measurements into the front bumper frame, and calculate the TTC from there.
+    
+% \end{itemize}
+
+
+
+\end{document}
